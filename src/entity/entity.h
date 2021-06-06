@@ -10,7 +10,7 @@
 #include "../util/shader.h"
 
 
-#define ENTITY_SIZE 10
+#define ENTITY_SIZE 2
 const static glm::vec3 enumColors[3] = {
         glm::vec3(0.0f, 0.0f, 0.0f),
         glm::vec3(1.0f, 1.0f, 0.0f),
@@ -43,6 +43,8 @@ public:
     virtual void StepEntity(std::vector<std::vector<Entity *>> &entities, int i, int j);
 
     void SwapEntity(std::vector<std::vector<Entity *>> &entities, Point p1, Point p2);
+
+    bool IsNone(std::vector<std::vector<Entity *>> &entities, int x, int y);
 };
 
 

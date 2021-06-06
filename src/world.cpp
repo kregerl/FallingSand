@@ -78,11 +78,22 @@ void World::PlaceEntity(int row, int col) {
     if ((this->m_prevMousePos.x == this->m_mousePos.x && this->m_prevMousePos.y == this->m_mousePos.y) ||
         (this->m_prevMousePos.x == -1 || this->m_prevMousePos.y == -1 || this->m_mousePos.x == -1 ||
          this->m_mousePos.y == -1)) {
+        // This is for brush sizes.
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (this->m_mousePos.x + i < SCREEN_WIDTH / ENTITY_SIZE && this->m_mousePos.x + i >= 0 &&
+                    this->m_mousePos.y + j < SCREEN_HEIGHT / ENTITY_SIZE && this->m_mousePos.y + j >= 0) {
+                    this->PlaceActiveType(this->m_mousePos.x + i, this->m_mousePos.y + j);
+                }
+            }
+        }
         this->PlaceActiveType(this->m_mousePos.x, this->m_mousePos.y);
 
-        for (int g = 1; g <= this->gravity; g++) {
-            if (this->m_mousePos.y - g >= 0) {
-                this->PlaceActiveType(this->m_mousePos.x, this->m_mousePos.y + g);
+        if (this->m_activeType != Entity::ROCK) {
+            for (int g = 1; g < this->gravity; g++) {
+                if (this->m_mousePos.y - g >= 0) {
+                    this->PlaceActiveType(this->m_mousePos.x, this->m_mousePos.y + g);
+                }
             }
         }
         return;
@@ -116,7 +127,16 @@ void World::PlaceEntity(int row, int col) {
 
         if (currentX >= 0 && currentX < SCREEN_WIDTH / ENTITY_SIZE && currentY >= 0 &&
             currentY < SCREEN_HEIGHT / ENTITY_SIZE) {
-            this->PlaceActiveType(currentX, currentY);
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (currentX + i < SCREEN_WIDTH / ENTITY_SIZE &&
+                        currentY + j < SCREEN_HEIGHT / ENTITY_SIZE && currentX + i >= 0 && currentY + j >= 0) {
+                        this->PlaceActiveType(currentX + i, currentY + j);
+                    }
+                }
+            }
+
+//            this->PlaceActiveType(currentX, currentY);
         }
     }
 }

@@ -20,6 +20,13 @@ void Entity::SwapEntity(std::vector<std::vector<Entity *>> &entities, Point p1, 
     entities[p2.x][p2.y] = temp;
 }
 
+bool Entity::IsNone(std::vector<std::vector<Entity *>> &entities, int x, int y) {
+    if (entities[x][y]->type == NONE) {
+        return true;
+    }
+    return false;
+}
+
 
 
 

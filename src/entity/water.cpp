@@ -29,7 +29,7 @@ void Water::StepEntity(std::vector<std::vector<Entity *>> &entities, int i, int 
     // Gravity
     for (int g = 1; g <= this->m_gravity; g++) {
         // Sideways random movement
-        for (int f = 1; f <= rand() % 5 + 1; f++) {
+        for (int f = 1; f <= rand() % 10 + 1; f++) {
             // Whether or not a piece of sand should try moving left or right
             int rando = rand() % 2 + 1;
             if (j + g < SCREEN_HEIGHT / ENTITY_SIZE) {

@@ -13,7 +13,9 @@ Sand::Sand(glm::vec2 offset) : super(offset), m_gravity(3) {
     this->InitColor();
 }
 
-Sand::Sand(Entity *entity) : Sand(entity->offset) {}
+Sand::Sand(Entity *entity) : Sand(entity->offset) {
+
+}
 
 Sand::~Sand() {}
 
@@ -27,7 +29,7 @@ void Sand::StepEntity(std::vector<std::vector<Entity *>> &entities, int i, int j
     // Gravity
     for (int g = 1; g <= this->m_gravity; g++) {
         // Sideways random movement
-        for (int f = 1; f <= rand() % 4 + 1; f++) {
+        for (int f = 1; f <= 4; f++) {
             // Whether or not a piece of sand should try moving left or right
             int rando = rand() % 2 + 1;
             if (j + g < SCREEN_HEIGHT / ENTITY_SIZE) {
@@ -43,6 +45,7 @@ void Sand::StepEntity(std::vector<std::vector<Entity *>> &entities, int i, int j
                            rando == 2) {
                     lastValidPos = Point(i - f, j + g);
                 } else {
+//                    g = this->m_gravity;
                     break;
                 }
             }
