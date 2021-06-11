@@ -1,7 +1,7 @@
 #include "water.h"
 
 
-Water::Water(glm::vec2 offset) : super(offset), m_gravity(3) {
+Water::Water(glm::vec2 offset) : super(offset), m_gravity(5), m_spreadFactor(5) {
     this->m_numColors = 6;
     this->m_colorWeights.clear();
     this->m_colorWeights = {
@@ -14,6 +14,7 @@ Water::Water(glm::vec2 offset) : super(offset), m_gravity(3) {
     };
     this->type = Entity::WATER;
     this->InitColor();
+    this->m_density = 0;
 }
 
 Water::Water(Entity *entity) : Water(entity->offset) {}
@@ -25,39 +26,34 @@ glm::vec3 Water::GetColor() {
 }
 
 void Water::StepEntity(std::vector<std::vector<Entity *>> &entities, int i, int j) {
-    Point lastValidPos = Point(-1, -1);
-    // Gravity
-    for (int g = 1; g <= this->m_gravity; g++) {
-        // Sideways random movement
-        for (int f = 1; f <= rand() % 10 + 1; f++) {
-            // Whether or not a piece of sand should try moving left or right
-            int rando = rand() % 2 + 1;
-            if (j + g < SCREEN_HEIGHT / ENTITY_SIZE) {
-                if (entities[i][j + g]->type == Entity::NONE) {
-                    lastValidPos = Point(i, j + g);
-                } else if (i + f < SCREEN_WIDTH / ENTITY_SIZE &&
-                           entities[i + f][j + g]->type == Entity::NONE && rando == 1) {
-                    lastValidPos = Point(i + f, j + g);
-                } else if (i - f < SCREEN_WIDTH / ENTITY_SIZE && i - f >= 0 &&
-                           entities[i - f][j + g]->type == Entity::NONE &&
-                           rando == 2) {
-                    lastValidPos = Point(i - f, j + g);
-                } else if (i - f < SCREEN_WIDTH / ENTITY_SIZE && i - f >= 0 &&
-                           entities[i - f][j]->type == Entity::NONE &&
-                           rando == 2) {
-                    // Left
-                    lastValidPos = Point(i - f, j);
-                } else if (i + f < SCREEN_WIDTH / ENTITY_SIZE &&
-                           entities[i + f][j]->type == Entity::NONE && rando == 1) {
-                    // Right
-                    lastValidPos = Point(i + f, j);
-                } else {
-                    break;
-                }
+    Point lastValidPos = this->TraverseMatrix(entities, Point(i, j), Point(i, j + this->m_gravity));
+
+    if (lastValidPos.x == i && lastValidPos.y == j) {
+//        int random = (rand() % 2) + 1;
+//        if (random == 1) {
+//            // Down-Right
+//            lastValidPos = this->TraverseMatrix(entities, lastValidPos,
+//                                                Point(i + this->m_spreadFactor, j + this->m_gravity));
+//        } else if (random == 2) {
+//            // Down-Left
+//            lastValidPos = this->TraverseMatrix(entities, lastValidPos,
+//                                                Point(i - this->m_spreadFactor, j + this->m_gravity));
+//        }
+//        if (lastValidPos.x == i && lastValidPos.y == j) {
+            //Determines which side to move to
+            int random2 = (rand() % 2) + 1;
+            if (random2 == 1) {
+                // Right
+                lastValidPos = this->TraverseMatrix(entities, lastValidPos, Point(i + this->m_spreadFactor, j));
+            } else if (random2 == 2) {
+                // Left
+                lastValidPos = this->TraverseMatrix(entities, lastValidPos, Point(i - this->m_spreadFactor, j));
             }
-        }
+//        }
+
     }
-    if (lastValidPos.x != -1 && lastValidPos.y != -1) {
+
+    if (lastValidPos.x != i || lastValidPos.y != j) {
         SwapEntity(entities, Point(i, j), lastValidPos);
     }
 }

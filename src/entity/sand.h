@@ -2,7 +2,6 @@
 #define OPENGLFALLINGSAND_SAND_H
 
 #include "entity.h"
-#include "../world.h"
 
 class Sand : public Entity {
 private:
@@ -10,6 +9,7 @@ private:
     typedef Entity super;
 
     int m_gravity;
+    int m_spreadFactor;
 public:
 
     Sand(glm::vec2 offset);

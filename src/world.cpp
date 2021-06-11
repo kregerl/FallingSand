@@ -1,5 +1,7 @@
 #include "world.h"
 #include "entity/rock.h"
+#include "entity/wood.h"
+#include "entity/fire.h"
 
 World::World(Shader shader) : m_shader(shader) {
     this->InitWorld();
@@ -67,6 +69,10 @@ void World::MouseButtonClicked(GLFWwindow *window, int button, int action, int m
             this->m_activeType = Entity::WATER;
         } else if (this->m_activeType == Entity::WATER) {
             this->m_activeType = Entity::ROCK;
+        } else if (this->m_activeType == Entity::ROCK) {
+            this->m_activeType = Entity::WOOD;
+        } else if (this->m_activeType == Entity::WOOD) {
+            this->m_activeType = Entity::FIRE;
         } else {
             this->m_activeType = Entity::SAND;
         }
@@ -154,6 +160,14 @@ void World::PlaceActiveType(int x, int y) {
         case Entity::ROCK:
             this->entities[x][y] =
                     new Rock(this->entities[x][y]);
+            break;
+        case Entity::WOOD:
+            this->entities[x][y] =
+                    new Wood(this->entities[x][y]);
+            break;
+        case Entity::FIRE:
+            this->entities[x][y] =
+                    new Fire(this->entities[x][y]);
             break;
         case Entity::NONE:
             break;

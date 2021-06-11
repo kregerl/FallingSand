@@ -3,13 +3,13 @@
 
 
 #include "entity.h"
-#include "../world.h"
 
 class Water : public Entity {
 private:
     typedef Entity super;
 
     int m_gravity;
+    int m_spreadFactor;
 public:
     Water(glm::vec2 offset);
 
